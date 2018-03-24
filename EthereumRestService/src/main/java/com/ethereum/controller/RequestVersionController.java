@@ -11,10 +11,8 @@ import com.ethereum.services.RequestVersion;
 import com.ethereum.util.Constantes;
 
 @RestController
-@RequestMapping("/application.wadl/version")
+@RequestMapping("application.wadl/version")
 public class RequestVersionController {
-	
-	
 	private RequestVersion version = new RequestVersion();
 	private VersionResponse response = new VersionResponse();
 	
@@ -32,8 +30,6 @@ public class RequestVersionController {
 			response.setStatus(Constantes.ERROR_STATUS);
 			response.setCode(Constantes.GETH_FAILURE);
 		}
-		System.out.println(response.getStatus());
-		
 		return response;
 	}
 }

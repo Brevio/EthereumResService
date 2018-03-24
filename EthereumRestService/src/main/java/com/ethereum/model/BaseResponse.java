@@ -1,10 +1,8 @@
 package com.ethereum.model;
 
 public class BaseResponse {
-
-	 private String status;
 	 private Integer code;
-
+	 private String status;
 	 public String getStatus() {
 	  return status;
 	 }

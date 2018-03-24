@@ -9,25 +9,42 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.protocol.http.HttpService;
 import com.ethereum.model.PaymentRequest;
-import com.ethereum.util.Constantes;
+import com.ethereum.model.PaymentResponse;
+import com.ethereum.util.GasUtil;
 import com.ethereum.util.PropertiesUtil;
 
 public class Transaction {
-	private Web3j web3 = Web3j.build(new HttpService());
+	protected Web3j web3 = Web3j.build(new HttpService());
 		
-	public void sendWallet(PaymentRequest payment) throws InterruptedException, TransactionException, Exception{
+	public PaymentResponse sendWallet(PaymentRequest payment) throws InterruptedException, TransactionException, Exception{
+		BigInteger gasPrice;
 		Credentials credentials = WalletUtils
 				.loadCredentials(payment.getPassword(),
 						getDir(payment.getFromWallet()));
-		CreateTransactions
-		.send(web3,
-				payment.getFromWallet(),
-				payment.getToWallet(),
-				credentials,
-				payment.getValue());
+		switch (payment.getGasPricePriority()) {
+		case 0:
+			gasPrice = GasUtil.gasHigh;
+			break;
+		case 1:
+			gasPrice = GasUtil.gasMed;
+			break;
+		case 2:
+			gasPrice = GasUtil.gasLow;
+			break;
+		default:
+			gasPrice = GasUtil.gasLow;
+			break;
+		}
+		 return CreateTransactions
+				 .send(web3,
+						 payment.getFromWallet(),
+						 payment.getToWallet(),
+						 credentials,
+						 payment.getValue(),
+						 gasPrice);
 	}
 
-	private String getDir(String fromWallet) {
+	protected String getDir(String fromWallet) {
 		String pathWallets = PropertiesUtil.getProperties("PATH_WALLET");
 		
 		File baseFolder = new File(pathWallets);
@@ -35,7 +52,7 @@ public class Transaction {
 		
 		for (File file : wallets) {
 			file.getAbsolutePath();
-			if(file.getName().contains(fromWallet.substring(2))){
+			if(file.getName().contains(fromWallet.substring(2).toLowerCase())){
 				return file.getAbsolutePath();
 			}
 		}

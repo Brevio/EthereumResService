@@ -1,14 +1,12 @@
 package com.ethereum.model;
 
-import java.math.BigInteger;
-
 public class PaymentRequest {
 
 	private String fromWallet;
 	private String password;
 	private String toWallet;
-	private BigInteger value;
-	
+	private String value;
+	private int gasPricePriority;
 	
 	public void setFromWallet(String fromWallet){
 		this.fromWallet=fromWallet;
@@ -28,10 +26,17 @@ public class PaymentRequest {
 	public String getToWallet(){
 		return toWallet;
 	}
-	public void setValue(BigInteger value){
+	public void setValue(String value){
 		this.value=value;
 	}
-	public BigInteger getValue(){
+	public String getValue(){
 		return value;
 	}
+	public int getGasPricePriority() {
+		return gasPricePriority;
+	}
+	public void setGasPricePriority(int gasPricePriority) {
+		this.gasPricePriority = gasPricePriority;
+	}
 }
+
